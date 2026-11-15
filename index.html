@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1115">
+<meta name="description" content="Harrison's daily Life Goals dashboard">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Life Goals">
+<title>Life Goals</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main id="app">
+  <header class="top">
+    <div class="row between">
+      <div>
+        <div class="muted small" id="dow"></div>
+        <h1 id="date">Life Goals</h1>
+      </div>
+      <span class="badge sample" title="Cards show placeholder values until live data is connected">Sample data</span>
+    </div>
+    <div class="progress-wrap">
+      <div class="row between small"><span id="planLabel">90-day plan</span><span id="planDay"></span></div>
+      <div class="bar"><div class="fill" id="planFill"></div></div>
+      <div class="muted xsmall" id="planNote"></div>
+    </div>
+  </header>
+
+  <section class="hero card" id="sleepCard"></section>
+  <section class="grid3" id="statusRow"></section>
+  <section class="grid2" id="moveRow"></section>
+
+  <h2 class="section-title">Today</h2>
+  <section class="card" id="bodyCard"></section>
+  <section class="card" id="careerCard"></section>
+  <section class="card" id="moneyCard"></section>
+  <section class="card" id="relCard"></section>
+  <section class="card" id="enjoyCard"></section>
+
+  <h2 class="section-title">Morning checklist <span class="muted small" id="checkCount"></span></h2>
+  <section class="card" id="checklist"></section>
+
+  <h2 class="section-title">Quick log</h2>
+  <section class="quick" id="quick">
+    <button data-log="weight">⚖️ Weight</button>
+    <button data-log="protein">🥩 Protein</button>
+    <button data-log="steps">👟 Steps</button>
+    <button data-log="spend">💵 Spend note</button>
+    <button data-log="dating">💬 Dating action</button>
+    <button data-log="enjoy">🎸 Enjoyment note</button>
+  </section>
+
+  <section class="card" id="recent"></section>
+
+  <section class="tools">
+    <button id="exportBtn" class="ghost">Export logs (JSON)</button>
+    <label class="ghost filebtn">Import logs<input type="file" id="importFile" accept="application/json" hidden></label>
+    <button id="installBtn" class="ghost" hidden>Install app</button>
+  </section>
+  <p class="muted xsmall foot">Values tagged <span class="tag s">sample</span> are placeholders. Values tagged <span class="tag l">logged</span> are yours, saved on this device. Targets come from your Daily Goals, Fitness, Career and Finance bots. Times in Arizona (MST). <span id="swStatus"></span></p>
+</main>
+
+<dialog id="logDialog">
+  <form method="dialog" id="logForm">
+    <h3 id="logTitle">Log</h3>
+    <label id="valWrap"><span id="valLabel">Value</span><input id="logValue" inputmode="decimal" autocomplete="off"></label>
+    <label id="noteWrap"><span>Note</span><input id="logNote" autocomplete="off"></label>
+    <div class="row end gap">
+      <button value="cancel" class="ghost" formnovalidate>Cancel</button>
+      <button value="ok" id="logOk" class="primary">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>

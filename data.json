@@ -1,0 +1,49 @@
+{
+  "_readme": "Seed data for the Life Goals PWA. 'targets' are real (from Harrison's Daily Goals, Fitness, Career, Finance bots, Nov 14 2026). Everything under 'sample' is MOCK placeholder data and is labeled as sample in the UI. Replace 'sample' with live pulls later.",
+  "timezone": "America/Phoenix",
+  "updated": "2026-11-14",
+  "plan": { "name": "Anduril 90-day plan", "start": "2026-10-05", "days": 90, "phase_note": "Days 31–60: own one slice of Yifu's line, close one constraint end to end" },
+  "targets": {
+    "sleep_hours_min": 7.5,
+    "protein_g": [180, 200],
+    "creatine_g": 10,
+    "steps": [8000, 10000],
+    "career_task_minutes_max": 10,
+    "spend": null,
+    "spend_note": "No target set yet (Personal Finance). Exclude card payments and Fidelity transfers.",
+    "dating_actions_per_day": 1,
+    "enjoyment_blocks_per_day": 1
+  },
+  "split": {
+    "Mon": "Chest / Biceps",
+    "Tue": "Legs / Abs",
+    "Wed": "Back / Shoulders",
+    "Thu": "Chest / Biceps",
+    "Fri": "Back / Triceps",
+    "Sat": "Rest or Zone 2",
+    "Sun": "Rest or Zone 2"
+  },
+  "checklist": [
+    { "id": "sleep", "label": "Slept 7.5+ hrs" },
+    { "id": "protein", "label": "180–200 g protein" },
+    { "id": "creatine", "label": "10 g creatine" },
+    { "id": "move", "label": "8–10k steps or today's training" },
+    { "id": "career", "label": "One career task or win at Anduril (<10 min)" },
+    { "id": "spend", "label": "Spend check (no target set yet)" },
+    { "id": "dating", "label": "One dating action (Hinge or social)" },
+    { "id": "enjoy", "label": "One enjoyment block" }
+  ],
+  "sample": {
+    "sleep": { "duration_h": 7.6, "efficiency_pct": 88, "stages_min": { "deep": 62, "rem": 95, "light": 280, "awake": 19 }, "rhr_bpm": 74, "hrv_ms": 41 },
+    "weight_lb": [196.4, 196.0, 195.8, 195.9, 195.2, 195.0, 194.6],
+    "protein_g_today": 120,
+    "creatine_done": true,
+    "steps_today": 6200,
+    "zone2_min_week": 45,
+    "zone2_target_min_week": null,
+    "career": { "task": "Write down one constraint or shortage seen on Yifu's line today", "win": null, "cert_min_today": 15, "cert_min_week": 60 },
+    "money": { "spend_today": 34.5, "spend_week": 212.0, "surplus_month": null, "debt_total": null, "invest_total": null },
+    "relationship": { "actions_today": 0, "dates_this_week": 1 },
+    "enjoyment": { "done": false, "note": "" }
+  }
+}
