@@ -265,6 +265,7 @@ def main():
         "plan": cfg["plan"], "targets": cfg["targets"],
         # list kept for v1 clients still running a cached app.js
         "checklist": cfg["checklist"]["items"],
+        "split": public["split"]["value"] or {},  # v1 clients
         "checklist_source": {k: cfg["checklist"][k] for k in ("source", "as_of")},
         "fields": public,
         "private_keys": sorted(private),
