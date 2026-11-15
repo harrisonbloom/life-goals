@@ -4,7 +4,7 @@
    Measured personal data sits in data.json.private, AES-GCM encrypted; the passphrase is
    entered once per device and kept in localStorage. Logs: localStorage "lg.logs.v1". */
 'use strict';
-const TZ = 'America/Phoenix';
+const TZ = 'America/Los_Angeles'; // Harrison lives in Mission Viejo, CA
 const KEY = 'lg.logs.v1';
 const PKEY = 'lg.pass.v1';
 const STALE_DAYS = 3;

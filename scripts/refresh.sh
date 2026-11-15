@@ -3,7 +3,7 @@
 # Connector pulls (Drive, Finance, Calendar) must already be saved in $PULLS — see REFRESH.md.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-DATE="${1:-$(TZ=America/Phoenix date +%F)}"
+DATE="${1:-$(TZ=America/Los_Angeles date +%F)}"
 PULLS="/workspace/life-goals-pulls/$DATE"
 mkdir -p "$PULLS"
 python3 scripts/pull_health.py --out "$PULLS/health.json" --date "$DATE" || echo "WARN: Google Health pull failed/unauthenticated; health fields will be 'No data yet'"

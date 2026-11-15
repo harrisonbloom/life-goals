@@ -34,7 +34,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 
 ROOT = Path(__file__).resolve().parent.parent
-TZ = ZoneInfo("America/Phoenix")
+TZ = ZoneInfo("America/Los_Angeles")
 PBKDF2_ITER = 310000
 PASS_FILE = Path.home() / ".config/life-goals/passphrase"
 DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -61,6 +61,13 @@ def load_any(path):
         except json.JSONDecodeError:
             start = txt.find("{", start + 1)
     return None
+
+
+def local_date(ts):
+    """ISO timestamp (any offset, or Z) -> YYYY-MM-DD in America/Los_Angeles."""
+    if not ts:
+        return ""
+    return dt.datetime.fromisoformat(ts.replace("Z", "+00:00")).astimezone(TZ).date().isoformat()
 
 
 # ---------------- health ----------------
@@ -96,7 +103,7 @@ def health_fields(h, today):
         out["steps"] = F()
     ex = h.get("exercise_week") or {}
     devs = h.get("devices") or []
-    last_sync = max((d.get("last_sync") or "" for d in devs), default="")[:10]
+    last_sync = local_date(max((d.get("last_sync") or "" for d in devs), default=""))
     if ex.get("sessions"):
         out["zone2_week"] = F(ex["moderate_zone_min"], "live", f"{src} · exercise moderate-HR minutes", today,
                               f"{ex['sessions']} sessions since {ex['week_start']}")
@@ -107,7 +114,7 @@ def health_fields(h, today):
     if devs:
         d = devs[0]
         out["tracker"] = F({"device": d.get("device"), "battery": d.get("battery"), "battery_status": d.get("battery_status"),
-                            "last_sync": d.get("last_sync")}, "live", src, (d.get("last_sync") or "")[:10] or today)
+                            "last_sync": d.get("last_sync")}, "live", src, local_date(d.get("last_sync") or "") or today)
     return out
 
 

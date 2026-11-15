@@ -1,10 +1,12 @@
-# Morning refresh (run daily, ~6:30 AM America/Phoenix)
+# Morning refresh (run daily, ~3:45 AM America/Los_Angeles, before Harrison wakes at 4:30)
 
 Goal: rebuild `data.json` from real sources and push it; GitHub Pages redeploys in ~1 min.
 All steps are **read-only** except the final `git push` of this repo. Don't message other bots,
 send email, or change any external data.
 
-`DATE` = today in America/Phoenix (`TZ=America/Phoenix date +%F`).
+`DATE` = today in America/Los_Angeles (`TZ=America/Los_Angeles date +%F`). Harrison lives in Mission Viejo, CA;
+every date in the pipeline and the app (today, day-of-plan, split weekday, spend today/week, calendar week,
+stale age) is computed in America/Los_Angeles.
 `PULLS` = `/workspace/life-goals-pulls/$DATE` (outside the repo; raw pulls never get committed).
 
 ## 1. Save connector pulls into `$PULLS`
@@ -19,7 +21,7 @@ Wrapper text around the JSON is fine; `build_data.py` extracts the first JSON ob
 | `finance_connections.txt` | `user-Finance-xai` · `finance_list_connections` `{}` | as-of dates, stale loan link |
 | `finance_card_tx.txt` | `user-Finance-xai` · `finance_query_liability_transactions` `{date_from: <1st of month>, date_to: DATE, limit: 200}` | `spend_today/week/month` |
 | `finance_bank_tx.txt` | `user-Finance-xai` · `finance_query_account_transactions` same range | `spend_*` |
-| `calendar_events.txt` | `user-Google-calendar` · `list_events` `{calendarId: "primary", startTime: <Monday>T00:00:00-07:00, endTime: <next Monday>T00:00:00-07:00}` | `dates_week`, `enjoy_cal_today` |
+| `calendar_events.txt` | `user-Google-calendar` · `list_events` `{calendarId: "primary", startTime: <Monday>T00:00:00<offset>, endTime: <next Monday>T00:00:00<offset>}` with the Pacific offset (`-08:00` PST Nov–Mar, `-07:00` PDT; `TZ=America/Los_Angeles date +%:z`) | `dates_week`, `enjoy_cal_today` |
 
 If a month started less than 7 days ago, start the transaction range at that Monday instead so the
 week total is complete. If `next_cursor` is not null, page and concatenate the CSV rows.

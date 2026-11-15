@@ -9,7 +9,7 @@ Body weight values are NOT written (privacy: the repo is public); only the lates
 import argparse, datetime as dt, json, os, subprocess, sys, tempfile
 from zoneinfo import ZoneInfo
 
-TZ = ZoneInfo("America/Phoenix")
+TZ = ZoneInfo("America/Los_Angeles")
 CLI_DIR = "/workspace/google-health-cli"
 BIN = "/tmp/ghealth"
 

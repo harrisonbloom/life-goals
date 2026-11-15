@@ -1,6 +1,6 @@
 {
   "_readme": "Hand-set inputs for build_data.py. Everything here is a plan/target (status 'config'), not a measurement. Update when a bot reports a new target. Each entry names its source and the date it was confirmed.",
-  "timezone": "America/Phoenix",
+  "timezone": "America/Los_Angeles",
   "plan": { "name": "Anduril 90-day plan", "start": "2026-10-05", "days": 90, "phase_note": "Days 31–60: own one slice of Yifu's line, close one constraint end to end",
             "source": "Career Progression bot", "as_of": "2026-11-14" },
   "targets": {
