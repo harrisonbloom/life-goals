@@ -1,4 +1,4 @@
-const CACHE = 'life-goals-v4';
+const CACHE = 'life-goals-v5';
 const ASSETS = ['./', 'index.html', 'styles.css', 'app.js', 'data.json', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png', 'icons/apple-touch-icon.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting())); });

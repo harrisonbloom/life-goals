@@ -80,6 +80,9 @@ const noteOf = (k) => F[k]?.note ? `<div class="muted xsmall">${esc(F[k].note)}<
 // ---------- derived values (today's log wins over pulled data) ----------
 function val() {
   const w = todays('weight').sort((a, b) => b.ts - a.ts)[0] || latest('weight');
+  // Protein: prefer Google Health when it has today's grams (higher-confidence
+  // food-log breakdown). Otherwise use the on-device quick-log sum. Never add
+  // them together — that would double-count meals logged in both places.
   const proteinLogs = todays('protein');
   const stepLogs = todays('steps').sort((a, b) => b.ts - a.ts);
   const spendLogs = todays('spend');
@@ -93,7 +96,9 @@ function val() {
   return {
     weight: w ? { v: w.value, f: 'log' } : null,
     weightSeries: weightSeries.length >= 2 ? { v: weightSeries.slice(-14), f: 'log' } : null,
-    protein: proteinLogs.length ? { v: sum(proteinLogs), f: 'log' } : null,
+    protein: (fld('protein') && fld('protein') !== 'locked' && fld('protein').value != null)
+      ? { v: fld('protein').value, f: fld('protein') }
+      : (proteinLogs.length ? { v: sum(proteinLogs), f: 'log' } : null),
     creatine: L.checklist[today]?.creatine ? { v: true, f: 'log' } : null,
     steps: stepLogs.length ? { v: stepLogs[0].value, f: 'log', label: 'today' } : steps && steps !== 'locked' ? { v: steps.value, f: steps, label: steps.as_of === today ? 'today' : md(steps.as_of) } : null,
     spendLogToday: spendLogs.length ? sum(spendLogs) : null,
@@ -151,7 +156,7 @@ function render() {
   const pr = V.protein, [pLo, pHi] = T.protein_g;
   $('statusRow').innerHTML =
     stat('Weight', V.weight ? `${num(V.weight.v, 1)}<span class="unit">lb</span>` : '—', V.weight ? tag('log') : 'Log it below') +
-    stat('Protein', pr ? `${num(pr.v)}<span class="unit">g</span>` : '—', `${pLo}–${pHi}g ${pr ? tag('log') : ''}`, pr ? (pr.v >= pLo ? 'ok' : 'warnc') : '') +
+    stat('Protein', pr ? `${num(pr.v)}<span class="unit">g</span>` : '—', `${pLo}–${pHi}g ${pr ? tag(pr.f) : ''}`, pr ? (pr.v >= pLo ? 'ok' : 'warnc') : '') +
     stat('Creatine', V.creatine ? '✓ Done' : 'Not yet', `${T.creatine_g}g ${V.creatine ? tag('log') : ''}`, V.creatine ? 'ok' : 'warnc');
 
   // Steps + training split
@@ -174,8 +179,11 @@ function render() {
   const z2 = fld('zone2_week'), s7 = fld('steps_7d');
   $('bodyCard').innerHTML = `<div class="card-h"><b>💪 Body</b></div>${spark}
     ${line('Weight trend', series ? '' : `<span class="empty" title="${esc(F.weight?.note || '')}">Log 2+ weigh-ins</span>`)}
-    ${line('Protein', pr ? `${num(pr.v)} / ${pLo}–${pHi} g ${tag('log')}` : missing('protein'))}
+    ${line('Calories in', calInLine())}
+    ${line('Calories burned', calBurnLine())}
+    ${line('Protein', pr ? `${num(pr.v)} / ${pLo}–${pHi} g ${tag(pr.f)}` : missing('protein'))}
     ${line('Training', `${esc(splitToday)}${L.checklist[today]?.move ? ' <span class="ok">✓</span>' : ''}`)}
+    ${sessionLines()}
     ${line('Steps 7-day avg', s7 && s7 !== 'locked' ? `${num(s7.value)} ${tag(s7)}` : missing('steps_7d'))}
     ${line('Zone 2 this week', z2 && z2 !== 'locked' ? `${z2.value} min ${tag(z2)}` : missing('zone2_week'))}
     ${z2 ? '' : noteOf('zone2_week')}`;
@@ -226,6 +234,41 @@ function render() {
   const recent = L.entries.slice().sort((a, b) => b.ts - a.ts).slice(0, 6);
   $('recent').innerHTML = `<div class="card-h"><b>Recent logs</b><span class="muted small">${L.entries.length} total</span></div>` +
     (recent.length ? recent.map((e) => line(`${e.date} · ${e.type}`, `${e.value != null ? esc(e.value) : ''}${e.note ? ' ' + esc(e.note) : ''}`)).join('') : '<span class="empty">No logs yet. Use the buttons above.</span>');
+}
+
+function calInLine() {
+  const ci = fld('calories_in'), y = fld('calories_in_yesterday');
+  const tgt = D.targets && D.targets.calories_kcal;
+  if (ci && ci !== 'locked') {
+    const vs = tgt != null ? ` / ${num(tgt)}` : '';
+    const yday = y && y !== 'locked' ? ` <span class="muted xsmall">· yday ${num(y.value)}</span>` : '';
+    return `${num(ci.value)}${vs} kcal ${tag(ci)}${yday}`;
+  }
+  const miss = missing('calories_in');
+  if (tgt != null) return `${miss} <span class="muted xsmall">target ${num(tgt)} kcal</span>`;
+  return miss;
+}
+function calBurnLine() {
+  const cb = fld('calories_burned'), y = fld('calories_burned_yesterday');
+  if (cb && cb !== 'locked') {
+    const yday = y && y !== 'locked' ? ` <span class="muted xsmall">· yday ${num(y.value)}</span>` : '';
+    return `${num(cb.value)} kcal ${tag(cb)}${yday}`;
+  }
+  return missing('calories_burned');
+}
+function sessionLines() {
+  const sess = fld('exercise_sessions');
+  if (!sess || sess === 'locked') {
+    return line('Workouts this week', missing('exercise_sessions'));
+  }
+  const list = sess.value || [];
+  const head = list.length ? `${list.length} ${tag(sess)}` : `<span class="empty">None this week</span> ${tag(sess)}`;
+  const rows = list.map((s) => {
+    const dur = s.duration_min != null ? `${s.duration_min} min` : '';
+    const kcal = s.kcal != null ? ` · ${num(s.kcal)} kcal` : '';
+    return line('·', `${md(s.date)} · ${esc(s.type)}${dur ? ' · ' + dur : ''}${kcal}`);
+  }).join('');
+  return line('Workouts this week', head) + rows;
 }
 
 function trackerNote() {

@@ -8,7 +8,9 @@
     "sleep_hours_min": 7.5, "protein_g": [180, 200], "creatine_g": 10, "steps": [8000, 10000],
     "career_task_minutes_max": 10, "spend": null,
     "spend_note": "No spend target set yet (Personal Finance). Spend excludes card payments and transfers to investment accounts.",
-    "dating_actions_per_day": 1, "enjoyment_blocks_per_day": 1, "zone2_min_week": null
+    "dating_actions_per_day": 1, "enjoyment_blocks_per_day": 1, "zone2_min_week": null,
+    "calories_kcal": null,
+    "calories_note": "No calorie-in target set yet."
   },
   "checklist": {
     "source": "Daily Goals bot (Morning goals checklist)", "as_of": "2026-11-14",

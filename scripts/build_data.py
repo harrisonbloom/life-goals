@@ -76,7 +76,9 @@ def health_fields(h, today):
     src = "Google Health (ghealth CLI)"
     if not h or not h.get("auth_ok"):
         note = "Google Health sign-in expired; re-auth ghealth on the box"
-        for k in ("sleep", "rhr", "hrv", "steps", "steps_7d", "zone2_week"):
+        for k in ("sleep", "rhr", "hrv", "steps", "steps_7d", "zone2_week",
+                  "calories_in", "calories_in_yesterday", "protein",
+                  "calories_burned", "calories_burned_yesterday", "exercise_sessions"):
             out[k] = F(note=note)
         return out
     s = h.get("sleep")
@@ -111,6 +113,64 @@ def health_fields(h, today):
         out["zone2_week"] = F(0, "live", src, last_sync, "No workouts recorded this week")
     else:
         out["zone2_week"] = F(note=f"Fitbit not synced this week (last sync {last_sync or 'unknown'})")
+
+    # Nutrition (calories in + protein) and calories burned are encrypted private fields.
+    # Missing days are not treated as zero. Food names are never stored.
+    src_nut = f"{src} · nutrition-log"
+    nut = h.get("nutrition") or {}
+    last_nut = nut.get("last_date")
+    last_note = f"; last Google Health food log {last_nut}" if last_nut else "; no food logs in the last 90 days"
+    td, yd = nut.get("today") or {}, nut.get("yesterday") or {}
+    if td.get("kcal") is not None:
+        out["calories_in"] = F(int(td["kcal"]), "live", src_nut, td["date"],
+                               "Calories logged in the Google Health app today")
+    else:
+        out["calories_in"] = F(note="No food logged in Google Health today" + last_note)
+    if yd.get("kcal") is not None:
+        out["calories_in_yesterday"] = F(int(yd["kcal"]), "live", src_nut, yd["date"],
+                                         "Calories logged in the Google Health app yesterday")
+    else:
+        out["calories_in_yesterday"] = F(note="No food logged in Google Health yesterday" + last_note)
+    # Protein: Google Health is the higher-confidence source (identified food entries
+    # with nutrient breakdown). The app uses this for today when present, and falls
+    # back to the on-device quick-log otherwise. The two are never added together,
+    # which would double-count if the same meals were logged in both places.
+    if td.get("protein_g") is not None:
+        out["protein"] = F(int(td["protein_g"]), "live", src_nut, td["date"],
+                           "From Google Health food logs. Quick-log is used only when Health has no protein for today (not added together).")
+    else:
+        out["protein"] = F(note="No protein in Google Health for today" + last_note +
+                           ". Quick-log is the fallback until you log food in Google Health.")
+
+    burn = h.get("calories_burned") or {}
+    bt, by_ = burn.get("today") or {}, burn.get("yesterday") or {}
+    src_burn = f"{src} · total-calories"
+    if bt.get("kcal") is not None:
+        note = "Today so far" if bt.get("date") == today else "Latest full day synced"
+        out["calories_burned"] = F(int(bt["kcal"]), "live", src_burn, bt["date"], note)
+    else:
+        out["calories_burned"] = F(note="No total-calories (calories burned) for today")
+    if by_.get("kcal") is not None:
+        out["calories_burned_yesterday"] = F(int(by_["kcal"]), "live", src_burn, by_["date"],
+                                             "Calories burned yesterday")
+    else:
+        out["calories_burned_yesterday"] = F(note="No total-calories (calories burned) for yesterday")
+
+    sess = h.get("exercise_sessions") or {}
+    sessions = sess.get("sessions") or []
+    last_sess = sess.get("last_date")
+    # type, duration, date only (plus session kcal when present). No notes or IDs.
+    clean = [{"date": s["date"], "type": s["type"], "duration_min": s.get("duration_min"),
+              "kcal": s.get("kcal")} for s in sessions]
+    if clean:
+        out["exercise_sessions"] = F(clean, "live", f"{src} · exercise sessions", today,
+                                     f"{len(clean)} session(s) since {sess.get('week_start', today)}")
+    elif last_sess:
+        out["exercise_sessions"] = F([], "live", f"{src} · exercise sessions", today,
+                                     f"No workouts recorded this week (last session {last_sess})")
+    else:
+        out["exercise_sessions"] = F(note="No exercise sessions in the last 60 days")
+
     if devs:
         d = devs[0]
         out["tracker"] = F({"device": d.get("device"), "battery": d.get("battery"), "battery_status": d.get("battery_status"),
@@ -254,7 +314,6 @@ def main():
         "career_win": F(note="Log wins with the quick-log; no bot tracks them yet"),
         "cert_minutes": F(note="No cert-minutes source yet (Continuing Education bot could supply it)"),
         "weight": F(note="Log weight with the quick-log (scale data not published: repo is public)"),
-        "protein": F(note="Log with the quick-log; no nutrition source connected"),
         "creatine": F(note="Check off in the morning checklist"),
         "dating_today": F(note="Log with the quick-log"),
     }

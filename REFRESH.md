@@ -28,6 +28,8 @@ week total is complete. If `next_cursor` is not null, page and concatenate the C
 
 Google Health needs no connector: `scripts/pull_health.py` runs the `ghealth` CLI on the box
 (`/workspace/google-health-cli`, token at `~/.config/ghealth/credentials.json`). `refresh.sh` runs it.
+Before checking auth, the script runs `ghealth auth refresh` so an expired access token does not
+fail the 3:45 AM run. The connected account already includes `nutrition.readonly`.
 
 ## 2. Build, check, push
 ```bash
@@ -58,11 +60,16 @@ more than 3 days old) · **config** = target/plan from a bot · **missing** = "N
 | 🔒 tracker (battery, last sync) | Google Health paired-devices | live |
 | 🔒 steps, steps_7d, steps_series | Google Health · Apple Health (iPhone) | live |
 | 🔒 zone2_week | Google Health exercise sessions, moderate-HR minutes | missing until Fitbit syncs |
+| 🔒 calories_in, calories_in_yesterday | Google Health `nutrition-log` daily-rollup (`energy.kcalSum`). Today and yesterday only; a missing day is not treated as 0. Food names are never stored. | missing (last food log 2026-08-21) |
+| 🔒 protein | Google Health `nutrition-log` (`nutrients.PROTEIN.gramsSum`) for today, when present. Higher-confidence than the quick-log: identified food entries with a nutrient breakdown. The app uses Health for today when this field is live, and falls back to the on-device quick-log otherwise. The two are never added together (that would double-count). | missing (same last log date); quick-log is the fallback |
+| 🔒 calories_burned, calories_burned_yesterday | Google Health `total-calories` daily-rollup (`kcalSum`; basal + active). 14-day API cap. Missing days are not zeros. | live |
+| 🔒 exercise_sessions | Google Health `exercise` list this week: type, duration, date (and session kcal when present). No IDs or free-text notes. | live, empty this week (last session 2026-10-18) |
 | 🔒 spend_today/week/month | Finance (Plaid): out-flows minus card payments, transfers, returned payments | live |
 | 🔒 debt_total, invest_total | Finance (Plaid) balances, rounded to $100 | live (debt stale: loan link broken) |
 | surplus_month | none (needs income + spend target) | missing |
 | 🔒 dates_week, enjoy_cal_today | Google Calendar primary, keyword match on titles | live |
-| weight, protein, creatine, dating, enjoyment, career win | Harrison's quick-logs (on-device) | logged |
+| weight, creatine, dating, enjoyment, career win | Harrison's quick-logs (on-device) | logged |
+| protein (fallback) | On-device quick-log, used only when Google Health has no protein for today | logged |
 | cert_minutes | none yet | missing |
 
 ## Privacy rules (repo is public)
@@ -75,3 +82,6 @@ more than 3 days old) · **config** = target/plan from a bot · **missing** = "N
 - Fitbit Air: battery 4%, last sync Nov 3; sleep/RHR/HRV stop at Oct 18. Charge it, wear it overnight, open the Fitbit app.
 - TD Auto loan: Plaid connection in error since Oct 3. Re-link it in Finance.
 - If `pull_health.py` reports `auth_ok: false`: re-run `ghealth auth login` on the box with Harrison.
+  The script already runs `ghealth auth refresh` first; this is only needed if the refresh token itself is revoked.
+- Calories in / protein: no food has been logged in Google Health since 2026-08-21. Log meals in the Google Health app (or Fitbit) and they will show on the Body card after the next morning refresh. No extra OAuth scope is needed (`nutrition.readonly` is already granted). There is no calorie-in target in `config.json` yet, so the card shows kcal without a "/ target".
+- Workouts this week stay empty until a session is logged in Google Health (or the Fitbit syncs). Last session was 2026-10-18.
