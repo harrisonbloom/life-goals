@@ -1,0 +1,35 @@
+{
+  "_readme": "Hand-set inputs for build_data.py. Everything here is a plan/target (status 'config'), not a measurement. Update when a bot reports a new target. Each entry names its source and the date it was confirmed.",
+  "timezone": "America/Phoenix",
+  "plan": { "name": "Anduril 90-day plan", "start": "2026-10-05", "days": 90, "phase_note": "Days 31–60: own one slice of Yifu's line, close one constraint end to end",
+            "source": "Career Progression bot", "as_of": "2026-11-14" },
+  "targets": {
+    "source": "Daily Goals bot (set by Harrison 2026-11-14)", "as_of": "2026-11-14",
+    "sleep_hours_min": 7.5, "protein_g": [180, 200], "creatine_g": 10, "steps": [8000, 10000],
+    "career_task_minutes_max": 10, "spend": null,
+    "spend_note": "No spend target set yet (Personal Finance). Spend excludes card payments and transfers to investment accounts.",
+    "dating_actions_per_day": 1, "enjoyment_blocks_per_day": 1, "zone2_min_week": null
+  },
+  "checklist": {
+    "source": "Daily Goals bot (Morning goals checklist)", "as_of": "2026-11-14",
+    "items": [
+      { "id": "sleep", "label": "Slept 7.5+ hrs" },
+      { "id": "protein", "label": "180–200 g protein" },
+      { "id": "creatine", "label": "10 g creatine" },
+      { "id": "move", "label": "8–10k steps or today's training" },
+      { "id": "career", "label": "One career task or win at Anduril (<10 min)" },
+      { "id": "spend", "label": "Spend check (no target set yet)" },
+      { "id": "dating", "label": "One dating action (Hinge or social)" },
+      { "id": "enjoy", "label": "One enjoyment block" }
+    ]
+  },
+  "career": {
+    "source": "Career Progression bot (days 31–60 priorities)", "as_of": "2026-11-14",
+    "tasks": [
+      "Write down one constraint or shortage you saw on Yifu's line today",
+      "Learn one standup term or gate you didn't know",
+      "Push one open shortage or blocker forward one step",
+      "Say one thing in standup about your slice of the line"
+    ]
+  }
+}

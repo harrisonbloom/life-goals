@@ -62,3 +62,15 @@ dialog label{display:block;margin-bottom:12px}
 dialog label span{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
 dialog input{width:100%;font:inherit;font-size:17px;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 18px);transform:translateX(-50%);background:var(--accent);color:#0f1115;padding:9px 16px;border-radius:999px;font-weight:600;font-size:13px;z-index:9}
+.tag.v{background:#0c2a3d;color:var(--accent2)}.tag.x{background:#3d1414;color:var(--bad)}.tag.c{background:var(--card2);color:var(--muted)}
+.tags{margin:-4px 0 4px}
+button.badge{font:inherit;font-size:11px;padding:4px 9px;cursor:pointer}
+.badge.lockb{background:#1e222b;color:var(--text);border:1px solid var(--line)}
+.badge.liveb{background:#0d3326;color:var(--accent);border:1px solid #145c43}
+.warnbox{margin-top:10px;background:#3b2f0b;color:var(--warn);border-radius:10px;padding:8px 10px;font-size:12.5px}
+.line>span:last-child{text-align:right}
+.toast{max-width:90vw;text-align:center}
+.tag{display:inline-block;white-space:nowrap;font-size:10px!important;line-height:1.5;cursor:help}
+.kv div div{background:none;padding:0;border-radius:0}
+.kv .xsmall{margin-top:4px}
+.stat .t{white-space:normal;line-height:1.6}

@@ -1,1 +1,3 @@
 screenshot*.png
+data.private.local.json
+__pycache__/

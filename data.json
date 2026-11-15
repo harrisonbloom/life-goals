@@ -1,49 +1,168 @@
 {
-  "_readme": "Seed data for the Life Goals PWA. 'targets' are real (from Harrison's Daily Goals, Fitness, Career, Finance bots, Nov 14 2026). Everything under 'sample' is MOCK placeholder data and is labeled as sample in the UI. Replace 'sample' with live pulls later.",
-  "timezone": "America/Phoenix",
-  "updated": "2026-11-14",
-  "plan": { "name": "Anduril 90-day plan", "start": "2026-10-05", "days": 90, "phase_note": "Days 31–60: own one slice of Yifu's line, close one constraint end to end" },
-  "targets": {
-    "sleep_hours_min": 7.5,
-    "protein_g": [180, 200],
-    "creatine_g": 10,
-    "steps": [8000, 10000],
-    "career_task_minutes_max": 10,
-    "spend": null,
-    "spend_note": "No target set yet (Personal Finance). Exclude card payments and Fidelity transfers.",
-    "dating_actions_per_day": 1,
-    "enjoyment_blocks_per_day": 1
+ "schema": 2,
+ "generated": "2026-11-14T21:39-07:00",
+ "date": "2026-11-14",
+ "timezone": "America/Phoenix",
+ "plan": {
+  "name": "Anduril 90-day plan",
+  "start": "2026-10-05",
+  "days": 90,
+  "phase_note": "Days 31–60: own one slice of Yifu's line, close one constraint end to end",
+  "source": "Career Progression bot",
+  "as_of": "2026-11-14"
+ },
+ "targets": {
+  "source": "Daily Goals bot (set by Harrison 2026-11-14)",
+  "as_of": "2026-11-14",
+  "sleep_hours_min": 7.5,
+  "protein_g": [
+   180,
+   200
+  ],
+  "creatine_g": 10,
+  "steps": [
+   8000,
+   10000
+  ],
+  "career_task_minutes_max": 10,
+  "spend": null,
+  "spend_note": "No spend target set yet (Personal Finance). Spend excludes card payments and transfers to investment accounts.",
+  "dating_actions_per_day": 1,
+  "enjoyment_blocks_per_day": 1,
+  "zone2_min_week": null
+ },
+ "checklist": [
+  {
+   "id": "sleep",
+   "label": "Slept 7.5+ hrs"
   },
+  {
+   "id": "protein",
+   "label": "180–200 g protein"
+  },
+  {
+   "id": "creatine",
+   "label": "10 g creatine"
+  },
+  {
+   "id": "move",
+   "label": "8–10k steps or today's training"
+  },
+  {
+   "id": "career",
+   "label": "One career task or win at Anduril (<10 min)"
+  },
+  {
+   "id": "spend",
+   "label": "Spend check (no target set yet)"
+  },
+  {
+   "id": "dating",
+   "label": "One dating action (Hinge or social)"
+  },
+  {
+   "id": "enjoy",
+   "label": "One enjoyment block"
+  }
+ ],
+ "checklist_source": {
+  "source": "Daily Goals bot (Morning goals checklist)",
+  "as_of": "2026-11-14"
+ },
+ "fields": {
   "split": {
+   "value": {
     "Mon": "Chest / Biceps",
     "Tue": "Legs / Abs",
-    "Wed": "Back / Shoulders",
+    "Wed": "Back / Shoulder",
     "Thu": "Chest / Biceps",
     "Fri": "Back / Triceps",
     "Sat": "Rest or Zone 2",
     "Sun": "Rest or Zone 2"
+   },
+   "status": "config",
+   "source": "Drive · Workout tracker sheet",
+   "as_of": "2026-11-14",
+   "note": "Sheet last edited 2025-04-28"
   },
-  "checklist": [
-    { "id": "sleep", "label": "Slept 7.5+ hrs" },
-    { "id": "protein", "label": "180–200 g protein" },
-    { "id": "creatine", "label": "10 g creatine" },
-    { "id": "move", "label": "8–10k steps or today's training" },
-    { "id": "career", "label": "One career task or win at Anduril (<10 min)" },
-    { "id": "spend", "label": "Spend check (no target set yet)" },
-    { "id": "dating", "label": "One dating action (Hinge or social)" },
-    { "id": "enjoy", "label": "One enjoyment block" }
-  ],
-  "sample": {
-    "sleep": { "duration_h": 7.6, "efficiency_pct": 88, "stages_min": { "deep": 62, "rem": 95, "light": 280, "awake": 19 }, "rhr_bpm": 74, "hrv_ms": 41 },
-    "weight_lb": [196.4, 196.0, 195.8, 195.9, 195.2, 195.0, 194.6],
-    "protein_g_today": 120,
-    "creatine_done": true,
-    "steps_today": 6200,
-    "zone2_min_week": 45,
-    "zone2_target_min_week": null,
-    "career": { "task": "Write down one constraint or shortage seen on Yifu's line today", "win": null, "cert_min_today": 15, "cert_min_week": 60 },
-    "money": { "spend_today": 34.5, "spend_week": 212.0, "surplus_month": null, "debt_total": null, "invest_total": null },
-    "relationship": { "actions_today": 0, "dates_this_week": 1 },
-    "enjoyment": { "done": false, "note": "" }
+  "career_task": {
+   "value": [
+    "Write down one constraint or shortage you saw on Yifu's line today",
+    "Learn one standup term or gate you didn't know",
+    "Push one open shortage or blocker forward one step",
+    "Say one thing in standup about your slice of the line"
+   ],
+   "status": "config",
+   "source": "Career Progression bot (days 31–60 priorities)",
+   "as_of": "2026-11-14",
+   "note": "Rotates daily; pick one, under 10 min"
+  },
+  "career_win": {
+   "value": null,
+   "status": "missing",
+   "source": null,
+   "as_of": null,
+   "note": "Log wins with the quick-log; no bot tracks them yet"
+  },
+  "cert_minutes": {
+   "value": null,
+   "status": "missing",
+   "source": null,
+   "as_of": null,
+   "note": "No cert-minutes source yet (Continuing Education bot could supply it)"
+  },
+  "weight": {
+   "value": null,
+   "status": "missing",
+   "source": null,
+   "as_of": null,
+   "note": "Log weight with the quick-log (scale data not published: repo is public); Google Health last weigh-in 2026-07-22"
+  },
+  "protein": {
+   "value": null,
+   "status": "missing",
+   "source": null,
+   "as_of": null,
+   "note": "Log with the quick-log; no nutrition source connected"
+  },
+  "creatine": {
+   "value": null,
+   "status": "missing",
+   "source": null,
+   "as_of": null,
+   "note": "Check off in the morning checklist"
+  },
+  "dating_today": {
+   "value": null,
+   "status": "missing",
+   "source": null,
+   "as_of": null,
+   "note": "Log with the quick-log"
   }
+ },
+ "private_keys": [
+  "dates_week",
+  "debt_total",
+  "enjoy_cal_today",
+  "hrv",
+  "invest_total",
+  "rhr",
+  "sleep",
+  "spend_month",
+  "spend_today",
+  "spend_week",
+  "steps",
+  "steps_7d",
+  "steps_series",
+  "surplus_month",
+  "tracker",
+  "zone2_week"
+ ],
+ "private": {
+  "alg": "PBKDF2-SHA256/AES-256-GCM",
+  "iter": 310000,
+  "salt": "m1S3xmjO9y1tAf5+uvDnvw==",
+  "iv": "e3U9bEkMUjFfclSN",
+  "ct": "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"
+ }
 }

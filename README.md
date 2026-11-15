@@ -1,9 +1,10 @@
-# Life Goals PWA (v1)
+# Life Goals PWA (v2)
 
 Plain HTML/CSS/JS, no build step, no dependencies.
 
 - `index.html`, `styles.css`, `app.js`: the app
-- `data.json`: seed data. `targets`, `split`, `checklist`, and `plan` are real (from the Daily Goals, Fitness, Career Progression, and Personal Finance bots, Nov 14 2026). Everything under `sample` is placeholder data and shows a "sample" tag in the UI. Replace it with live pulls later.
+- `data.json`: generated each morning by `scripts/build_data.py` (see `REFRESH.md`). Every field carries a source and as-of date. Health, money and calendar numbers are AES-GCM encrypted in `private` and unlock on the device with Harrison's passphrase.
+- `scripts/`: `refresh.sh` (daily entry point), `pull_health.py`, `build_data.py`, `check_public.py`, `config.json` (targets/plan).
 - `manifest.webmanifest`, `service-worker.js`, `icons/`: install and offline support
 - Logs are saved in localStorage (`lg.logs.v1`). Use Export/Import for a JSON backup.
 
